@@ -1,7 +1,10 @@
 package calc;
 
+import java.net.BindException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.ServerRuntimeException;
+import java.rmi.server.ServerCloneException;
 
 import javax.swing.JOptionPane;
 import javax.xml.namespace.QName;
@@ -28,8 +31,9 @@ public class CalculadoraClient {
 	 * 
 	 * @param args
 	 * @throws MalformedURLException
+	 * @throws BindException 
 	 */
-	public static void main(String[] args) throws MalformedURLException {
+	public static void main(String[] args) throws MalformedURLException, BindException {
 
 		publicaServico();
 		
@@ -64,12 +68,14 @@ public class CalculadoraClient {
 	/**
 	 * Publica o webService na porta 9786
 	 */
-	public static void publicaServico(){
+	public static void publicaServico() throws BindException{
 		try {
 			Endpoint.publish("http://127.0.0.1:9876/calc", new CalculadoraServerImpl());
 			JOptionPane.showMessageDialog(null, "Serviço publicado em: http://127.0.0.1:9876/calc");
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Falha ao subir o serviço.");
+
+				JOptionPane.showMessageDialog(null, "Serviço já em uso.");
+				
 		}
 	}
 	
